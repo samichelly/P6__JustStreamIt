@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>JustStreamIt</title>
+    <link href="styles/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope&family=Montserrat:wght@100&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+</head>
+
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="images/logo_JustStreamIt.png" alt="Logo du site">
+        </div>
+        <nav>
+            <ul class="menu">
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Catégories</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <main>
+        <section class="best_movie">
+            <div>
+                <h1>Meilleur film</h1>
+                <div id="title_best_movie"></div>
+                <div id="imdb_best_movie"></div>
+                <div id="id_best_movie"></div>
+                <button type="play" class="btn" href="">Play</button>
+            </div>
+            <div id="image_best_movie"></div>
+        </section>
+
+        <section class="best_rating_movies">
+            <h2>Films les mieux notés</h2>
+            <div class="photos_mosaique">
+                <img src="images/logo_JustStreamIt.png" alt="Photo1" title="Photo1" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo2" title="Photo2" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo3" title="Photo3" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo3" title="Photo3" />
+            </div>
+        </section>
+
+        <section class="categorie1">
+            <h2 id="categorie1"></h2>
+
+            <div class="swiper-container">
+                <div class="swiper-wrapper"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+
+        </section>
+
+
+        <section class="categorie2">
+            <h2>Catégorie 2</h2>
+            <div class="photos_mosaique">
+                <img src="images/logo_JustStreamIt.png" alt="Photo1" title="Photo1" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo2" title="Photo2" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo3" title="Photo3" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo3" title="Photo3" />
+            </div>
+        </section>
+
+        <section class="categorie3">
+            <h2>Catégorie 3</h2>
+            <div class="photos_mosaique">
+                <img src="images/logo_JustStreamIt.png" alt="Photo1" title="Photo1" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo2" title="Photo2" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo3" title="Photo3" />
+                <img src="images/logo_JustStreamIt.png" alt="Photo3" title="Photo3" />
+            </div>
+        </section>
+
+    </main>
+    <footer>
+        <h1>Résultat de la requête :</h1>
+
+        <script src="scripts/main.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    </footer>
+</body>
+
+</html>
