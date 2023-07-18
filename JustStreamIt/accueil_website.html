@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
 </head>
 
-
 <body>
     <header>
         <div class="logo">
@@ -25,7 +24,6 @@
             </ul>
         </nav>
     </header>
-
 
     <main>
         <section class="best_movie">
@@ -49,25 +47,32 @@
             </div>
         </section>
 
-        <section class="categorie1">
-            <h2 id="categorie1"></h2>
+        <button id="open-popup-button">Plus de détails</button>
 
+        <!-- Contenu de la pop-up -->
+        <div class="popup" id="my-popup">
+            <h2>Pop-up</h2>
+            <p>Contenu de la pop-up...</p>
+            <button id="close-popup-button">Fermer</button>
+        </div>
+
+        <section class="categorie">
+            <h2>Catégorie 1</h2>
+            <h2 id="categorie1"></h2>
             <div class="swiper-container">
                 <div class="swiper-wrapper"></div>
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
             </div>
-
         </section>
 
-
-        <section class="categorie2">
+        <!-- Catégorie 2 -->
+        <section class="categorie">
             <h2>Catégorie 2</h2>
-            <div class="photos_mosaique">
-                <img src="images/logo_JustStreamIt.png" alt="Photo1" title="Photo1" />
-                <img src="images/logo_JustStreamIt.png" alt="Photo2" title="Photo2" />
-                <img src="images/logo_JustStreamIt.png" alt="Photo3" title="Photo3" />
-                <img src="images/logo_JustStreamIt.png" alt="Photo3" title="Photo3" />
+            <div class="swiper-container">
+                <div class="swiper-wrapper"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
             </div>
         </section>
 
@@ -81,10 +86,15 @@
             </div>
         </section>
 
+        <div class="popup" id="my-popup">
+            <div id="popup-content"></div>
+            <button id="close-popup-button">Fermer</button>
+        </div>
+        
+
     </main>
     <footer>
         <h1>Résultat de la requête :</h1>
-
         <script src="scripts/main.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     </footer>
