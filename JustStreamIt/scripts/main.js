@@ -13,35 +13,32 @@ function get_main_movie(imdb_sorting = "-imdb_score", limit = 1) {
         .then(function (data) {
             let bestMovie = data.results[0]
             document.getElementById('title_best_movie').innerHTML = 'title : ' + bestMovie.title;
-            document.getElementById('id_best_movie').innerHTML = 'id : ' + bestMovie.id;
-            document.getElementById('imdb_best_movie').innerHTML = 'IMDB Score : ' + bestMovie.imdb_score;
+            document.getElementById('description_best_movie').innerHTML = 'description : ' + bestMovie.description;
             document.getElementById('image_best_movie').innerHTML = '<img src="' + bestMovie.image_url + '">';
-            const bestButton = document.getElementById('best-button');
+            const bestButton = document.getElementById('btn');
             bestButton.addEventListener('click', () => showMoviePopup(bestMovie.id));
+
+            // document.getElementById(genre).innerHTML = genre;
+            const buttons = document.querySelectorAll(`.categorie .btn`);
+            buttons.forEach(button => {
+                button.addEventListener('click', () => showMoviePopup(button.dataset.movieId));
+            });
+
         })
         .catch(function (error) {
             console.log(error);
         });
 }
-//   Fonction récursive pour identifier l'imdb le plus grand ?
-
 
 async function movies_by_category(genre, limit = 7) {
     let query_parameters = "?genre=" + genre + "&limit=" + limit;
     const url_category = url + query_parameters;
     console.log(url_category);
-
-    try {
-        const response = await fetch(url_category);
-        const data = await response.json();
-        const movies = data.results;
-        console.log(movies);
-        return movies;
-    }
-    catch (error) {
-        console.error("Erreur lors de la récupération des films :", error);
-        return []; // Retourner un tableau vide en cas d'erreur
-    }
+    const response = await fetch(url_category);
+    const data = await response.json();
+    const movies = data.results;
+    console.log(movies);
+    return movies;
 }
 
 
@@ -73,24 +70,34 @@ function carrousel(movies, genre) {
             },
         },
     });
-    // document.getElementById(genre).innerHTML = genre;
+    document.createElement('h2').innerHTML = genre;
     const buttons = document.querySelectorAll(`.categorie .btn`);
     buttons.forEach(button => {
         button.addEventListener('click', () => showMoviePopup(button.dataset.movieId));
     });
 }
 
+function openPopup() {
+    // const popup = document.getElementById('my-popup');
+    popup.style.display = 'block';
+}
+
+function closePopup() {
+    const popup = document.getElementById('my-popup');
+    popup.style.display = 'none';
+}
+
+
 async function showMoviePopup(movieId) {
     try {
         const response = await fetch(url + movieId);
         const data = await response.json();
-        console.log("uuuuuuuuuuuuuuuu")
         console.log(data)
-        console.log("cssssssssss")
 
         // Afficher la pop-up
-        const popup = document.getElementById('my-popup');
-        const popupContent = document.getElementById('popup-content');
+        const popup = document.createElement('my-popup');
+        popup.style.display = 'block';
+        const popupContent = document.createElement('popup-content');
         popupContent.innerHTML = `
         <h2>${data.title} (${data.year})</h2>
         <p><strong>Genres:</strong> ${data.genres.join(', ')}</p>
@@ -101,16 +108,14 @@ async function showMoviePopup(movieId) {
         <p><strong>Writers:</strong> ${data.writers.join(', ')}</p>
         <p><strong>Countries:</strong> ${data.countries.join(', ')}</p>
         <p><strong>Languages:</strong> ${data.languages.join(', ')}</p>
+        <img src= ${data.image_url}>
     `;
-        popup.style.display = 'block';
+        popup.appendChild(popupContent);
+
+        document.body.appendChild(popup);
     } catch (error) {
         console.error("Erreur lors de la récupération des détails du film :", error);
     }
-}
-
-function closePopup() {
-    const popup = document.getElementById('my-popup');
-    popup.style.display = 'none';
 }
 
 
