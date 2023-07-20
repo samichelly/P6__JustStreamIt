@@ -30,14 +30,23 @@ function get_main_movie(imdb_sorting = "-imdb_score", limit = 1) {
         });
 }
 
+
 async function movies_by_category(genre, limit = 7) {
-    let query_parameters = "?genre=" + genre + "&limit=" + limit;
+    const movies = await fetchMoviesByPage(genre, 1);
+    const moviesPage2 = await fetchMoviesByPage(genre, 2);
+    const allMovies = movies.concat(moviesPage2);
+    if (allMovies.length > limit) {
+        allMovies.splice(limit);
+    }
+    return allMovies;
+}
+
+async function fetchMoviesByPage(genre, page) {
+    const query_parameters = `?genre=${genre}&page=${page}`;
     const url_category = url + query_parameters;
-    console.log(url_category);
     const response = await fetch(url_category);
     const data = await response.json();
     const movies = data.results;
-    console.log(movies);
     return movies;
 }
 
@@ -122,8 +131,7 @@ async function showMoviePopup(movieId) {
 async function main() {
     try {
         const mainMovies = get_main_movie();
-
-        const genres = ["Adventure", "Drama", "Fantasy"];
+        const genres = ["Adventure"];//, "Drama", "Fantasy"];
         for (const genre of genres) {
             const movies = await movies_by_category(genre);
             carrousel(movies, genre);
