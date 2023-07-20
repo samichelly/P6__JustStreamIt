@@ -12,23 +12,17 @@ function get_main_movie(imdb_sorting = "-imdb_score", limit = 1) {
         })
         .then(function (data) {
             let bestMovie = data.results[0]
-            document.getElementById('title_best_movie').innerHTML = 'title : ' + bestMovie.title;
-            document.getElementById('description_best_movie').innerHTML = 'description : ' + bestMovie.description;
-            document.getElementById('image_best_movie').innerHTML = '<img src="' + bestMovie.image_url + '">';
-            const bestButton = document.getElementById('btn');
+            document.getElementById('best_movie').innerHTML = 
+            `<h2>${bestMovie.title} (${bestMovie.year})</h2>
+            <img src=  ${bestMovie.image_url}>`;
+            const bestButton = document.getElementById('btn_best_movie');
             bestButton.addEventListener('click', () => showMoviePopup(bestMovie.id));
-
-            // document.getElementById(genre).innerHTML = genre;
-            const buttons = document.querySelectorAll(`.categorie .btn`);
-            buttons.forEach(button => {
-                button.addEventListener('click', () => showMoviePopup(button.dataset.movieId));
-            });
-
         })
         .catch(function (error) {
             console.log(error);
         });
 }
+
 
 
 async function movies_by_category(genre, limit = 7) {
@@ -86,22 +80,11 @@ function carrousel(movies, genre) {
     });
 }
 
-function openPopup() {
-    // const popup = document.getElementById('my-popup');
-    popup.style.display = 'block';
-}
-
-function closePopup() {
-    const popup = document.getElementById('my-popup');
-    popup.style.display = 'none';
-}
 
 // Fonction pour créer et afficher la popup
 function showMoviePopup(movieId) {
-    // Créer les éléments de la popup
     const popup = document.createElement('div');
     popup.classList.add('popup');
-    popup.id = 'my-popup';
 
     const popupContent = document.createElement('div');
     popupContent.id = 'popup-content';
@@ -114,9 +97,9 @@ function showMoviePopup(movieId) {
     fetch(url + movieId)
         .then(response => response.json())
         .then(data => {
-            // Mettre les détails du film dans le contenu de la popup
             popupContent.innerHTML = `
                 <h2>${data.title} (${data.year})</h2>
+                <img src= ${data.image_url}>
                 <p><strong>Genres:</strong> ${data.genres.join(', ')}</p>
                 <p><strong>Description:</strong> ${data.description}</p>
                 <p><strong>IMDb Score:</strong> ${data.imdb_score}</p>
@@ -134,7 +117,7 @@ function showMoviePopup(movieId) {
 
             // Gérer l'événement du bouton "Fermer"
             closeButton.addEventListener('click', () => {
-                popup.remove(); // Supprimer la popup lorsque le bouton "Fermer" est cliqué
+                popup.remove();
             });
         })
         .catch(error => {
@@ -157,6 +140,3 @@ async function main() {
 }
 
 main();
-
-// const closePopupButton = document.getElementById('close-popup-button');
-// closePopupButton.addEventListener('click', closePopup);
