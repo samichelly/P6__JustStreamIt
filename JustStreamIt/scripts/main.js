@@ -96,37 +96,51 @@ function closePopup() {
     popup.style.display = 'none';
 }
 
+// Fonction pour créer et afficher la popup
+function showMoviePopup(movieId) {
+    // Créer les éléments de la popup
+    const popup = document.createElement('div');
+    popup.classList.add('popup');
+    popup.id = 'my-popup';
 
-async function showMoviePopup(movieId) {
-    try {
-        const response = await fetch(url + movieId);
-        const data = await response.json();
-        console.log(data)
+    const popupContent = document.createElement('div');
+    popupContent.id = 'popup-content';
 
-        // Afficher la pop-up
-        const popup = document.createElement('my-popup');
-        popup.style.display = 'block';
-        const popupContent = document.createElement('popup-content');
-        popupContent.innerHTML = `
-        <h2>${data.title} (${data.year})</h2>
-        <p><strong>Genres:</strong> ${data.genres.join(', ')}</p>
-        <p><strong>Description:</strong> ${data.description}</p>
-        <p><strong>IMDb Score:</strong> ${data.imdb_score}</p>
-        <p><strong>Actors:</strong> ${data.actors.join(', ')}</p>
-        <p><strong>Directors:</strong> ${data.directors.join(', ')}</p>
-        <p><strong>Writers:</strong> ${data.writers.join(', ')}</p>
-        <p><strong>Countries:</strong> ${data.countries.join(', ')}</p>
-        <p><strong>Languages:</strong> ${data.languages.join(', ')}</p>
-        <img src= ${data.image_url}>
-    `;
-        popup.appendChild(popupContent);
+    const closeButton = document.createElement('button');
+    closeButton.id = 'close-popup-button';
+    closeButton.textContent = 'Fermer';
 
-        document.body.appendChild(popup);
-    } catch (error) {
-        console.error("Erreur lors de la récupération des détails du film :", error);
-    }
+    // Récupérer les détails du film depuis l'API
+    fetch(url + movieId)
+        .then(response => response.json())
+        .then(data => {
+            // Mettre les détails du film dans le contenu de la popup
+            popupContent.innerHTML = `
+                <h2>${data.title} (${data.year})</h2>
+                <p><strong>Genres:</strong> ${data.genres.join(', ')}</p>
+                <p><strong>Description:</strong> ${data.description}</p>
+                <p><strong>IMDb Score:</strong> ${data.imdb_score}</p>
+                <p><strong>Actors:</strong> ${data.actors.join(', ')}</p>
+                <p><strong>Directors:</strong> ${data.directors.join(', ')}</p>
+                <p><strong>Writers:</strong> ${data.writers.join(', ')}</p>
+                <p><strong>Countries:</strong> ${data.countries.join(', ')}</p>
+                <p><strong>Languages:</strong> ${data.languages.join(', ')}</p>
+            `;
+
+            // Ajouter les éléments au DOM
+            popup.appendChild(popupContent);
+            popup.appendChild(closeButton);
+            document.body.appendChild(popup);
+
+            // Gérer l'événement du bouton "Fermer"
+            closeButton.addEventListener('click', () => {
+                popup.remove(); // Supprimer la popup lorsque le bouton "Fermer" est cliqué
+            });
+        })
+        .catch(error => {
+            console.error("Erreur lors de la récupération des détails du film :", error);
+        });
 }
-
 
 async function main() {
     try {
