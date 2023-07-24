@@ -1,4 +1,6 @@
 const url = 'http://localhost:8000/api/v1/titles/';
+const limitMoviesByCategory = 7;
+const MoviesByAPIPage = 5;
 
 
 // séparer l'obtention du dictionnaire et la l'affichage à partir du bouton
@@ -22,7 +24,7 @@ function get_main_movie(imdb_sorting = "-imdb_score") {
             console.log("test")
             console.log(data.results.slice(1, 8))
             // return data.results.slice(1, 3)
-            
+
             // Récupérer les data.results[1:8] pour gérer la partie Meilleurs Films
         })
         .catch(function (error) {
@@ -30,12 +32,20 @@ function get_main_movie(imdb_sorting = "-imdb_score") {
         });
 }
 
+function main_movie(best_Movie) {
+    document.getElementById('best_movie').innerHTML =
+        `<h2>${best_Movie.title} (${best_Movie.year})</h2>
+        <img src=  ${best_Movie.image_url}>`;
+    const bestButton = document.getElementById('btn_best_movie');
+    bestButton.addEventListener('click', () => showMoviePopup(best_Movie.id));
+}
+
 
 // ajouter l'argument les meilleurs films
 // genre facultatif
 // evolution possible, penser avec une fonction pour définir les paramèters et arguments
-async function movies_by_category(genre, limit = 7) {
-    const pagesToFetch = Math.ceil(limit / 5);
+async function movies_by_category(genre, limit = limitMoviesByCategory) {
+    const pagesToFetch = Math.ceil(limit / MoviesByAPIPage);
     const allMovies = [];
     for (let page = 1; page <= pagesToFetch; page++) {
         const moviesPage = await fetchMoviesByPage(genre, page);
@@ -47,11 +57,8 @@ async function movies_by_category(genre, limit = 7) {
     return allMovies;
 }
 
-
 async function fetchMoviesByPage(genre, page) {
-    console.log("hhhhh")
     const query_parameters = `?genre=${genre}&sort_by=-imdb_score&page=${page}`;
-    console.log("qqqqqq")
     const url_category = url + query_parameters;
     const response = await fetch(url_category);
     const data = await response.json();
@@ -136,7 +143,14 @@ function carrousel(movies, genre) {
     carrouselContainer.appendChild(nextButton);
     carrouselContainer.appendChild(prevButton);
 
-    document.querySelector(`.categorie.${genre}`).appendChild(carrouselContainer);
+    // Vérifier si le genre est défini (différent de null) avant d'ajouter la classe de genre
+    if (genre !== null) {
+        document.querySelector(`.categorie.${genre}`).appendChild(carrouselContainer);
+    } else {
+        // Si le genre est null, ajouter le carrouselContainer à l'élément 'sectionBestMovies'
+        const sectionBestMovies = document.querySelector('.categorie');
+        sectionBestMovies.appendChild(carrouselContainer);
+    }
 
     // Initialiser le carrousel avec Swiper
     new Swiper(carrouselContainer, {
@@ -154,15 +168,36 @@ function carrousel(movies, genre) {
         },
     });
 
-    const buttons = document.querySelectorAll(`.categorie.${genre} .btn`);
+    const buttonsSelector = genre !== null ? `.categorie.${genre} .btn` : '.btn';
+    const buttons = document.querySelectorAll(buttonsSelector);
+
     buttons.forEach(button => {
         button.addEventListener('click', () => showMoviePopup(button.dataset.movieId));
     });
 }
 
+
 async function main() {
     try {
-        const mainMovies = get_main_movie();
+        // const mainMovies = get_main_movie();
+        const bestMovies = await movies_by_category("");
+        console.log(bestMovies[0])
+        console.log("cccccc")
+        const topMovie = bestMovies[0]
+        main_movie(topMovie);
+
+        const otherBestMovies = bestMovies.slice(1, 8)
+        const sectionBestMovies = document.createElement('section');
+        sectionBestMovies.classList.add('categorie');
+        const h1BestMovies = document.createElement('h1');
+        h1BestMovies.textContent = "Films les mieux notes";
+        sectionBestMovies.appendChild(h1BestMovies);
+        document.querySelector('main').appendChild(sectionBestMovies);
+        carrousel(otherBestMovies, null);
+        // console.log(genre);
+
+
+
         const genres = ["Adventure", "Drama", "Fantasy"];
         for (const genre of genres) {
             const movies = await movies_by_category(genre);
