@@ -1,36 +1,9 @@
-const url = 'http://localhost:8000/api/v1/titles/';
-const limitMoviesByCategory = 7;
-const MoviesByAPIPage = 5;
-
-
-// séparer l'obtention du dictionnaire et la l'affichage à partir du bouton
-// Récupérer data best_movie
-function get_main_movie(imdb_sorting = "-imdb_score") {
-    fetch(url + "?sort_by=" + imdb_sorting)
-        .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            } else {
-                console.error("Page non atteinte, Erreur :", response.status);
-            }
-        })
-        .then(function (data) {
-            let bestMovie = data.results[0]
-            document.getElementById('best_movie').innerHTML =
-                `<h2>${bestMovie.title} (${bestMovie.year})</h2>
-            <img src=  ${bestMovie.image_url}>`;
-            const bestButton = document.getElementById('btn_best_movie');
-            bestButton.addEventListener('click', () => showMoviePopup(bestMovie.id));
-            console.log("test")
-            console.log(data.results.slice(1, 8))
-            // return data.results.slice(1, 3)
-
-            // Récupérer les data.results[1:8] pour gérer la partie Meilleurs Films
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-}
+const API_URL = 'http://localhost:8000/api/v1/titles/';
+const LIMIT_MOVIES_ByCATEGORY = 7;
+const LIMIT_BEST_MOVIES = 8;
+const MOVIES_BY_API_PAGE = 5;
+const CLASS_CATEGORIE = 'categorie';
+const CLASS_BTN = 'btn';
 
 function main_movie(best_Movie) {
     document.getElementById('best_movie').innerHTML =
@@ -40,12 +13,8 @@ function main_movie(best_Movie) {
     bestButton.addEventListener('click', () => showMoviePopup(best_Movie.id));
 }
 
-
-// ajouter l'argument les meilleurs films
-// genre facultatif
-// evolution possible, penser avec une fonction pour définir les paramèters et arguments
-async function movies_by_category(genre, limit = limitMoviesByCategory) {
-    const pagesToFetch = Math.ceil(limit / MoviesByAPIPage);
+async function movies_by_category(genre, limit = LIMIT_MOVIES_ByCATEGORY) {
+    const pagesToFetch = Math.ceil(limit / MOVIES_BY_API_PAGE);
     const allMovies = [];
     for (let page = 1; page <= pagesToFetch; page++) {
         const moviesPage = await fetchMoviesByPage(genre, page);
@@ -59,21 +28,19 @@ async function movies_by_category(genre, limit = limitMoviesByCategory) {
 
 async function fetchMoviesByPage(genre, page) {
     const query_parameters = `?genre=${genre}&sort_by=-imdb_score&page=${page}`;
-    const url_category = url + query_parameters;
+    const url_category = API_URL + query_parameters;
     const response = await fetch(url_category);
     const data = await response.json();
     return data.results;
 }
 
-
-
-// POPUP //
 async function fetchMovieDetails(movieId) {
     try {
-        const response = await fetch(url + movieId);
+        const response = await fetch(API_URL + movieId);
         return await response.json();
     } catch (error) {
         console.error("Erreur lors de la récupération des détails du film :", error);
+        throw error;
     }
 }
 
@@ -115,9 +82,22 @@ function showMoviePopup(movieId) {
         });
 }
 
+function createSection(className, genre = null) {
+    const section = document.createElement('section');
+    section.classList.add(className);
+    if (genre) {
+        section.classList.add(genre);
+    }
+    return section;
+}
 
-// CAROUSSEL //
-function carrousel(movies, genre) {
+function createHeading(textContent) {
+    const h1 = document.createElement('h1');
+    h1.textContent = textContent;
+    return h1;
+}
+
+function createCarrousel(movies, genre) {
     const swiperWrapper = document.createElement('div');
     swiperWrapper.classList.add('swiper-wrapper');
 
@@ -127,7 +107,7 @@ function carrousel(movies, genre) {
         movieCard.innerHTML = `
           <h2>${movie.title}</h2>
           <img src="${movie.image_url}" alt="${movie.title}" />
-          <button class="btn" data-movie-id="${movie.id}">More details</button>`;
+          <button class="${CLASS_BTN}" data-movie-id="${movie.id}">More details</button>`;
         swiperWrapper.appendChild(movieCard);
     });
 
@@ -143,16 +123,13 @@ function carrousel(movies, genre) {
     carrouselContainer.appendChild(nextButton);
     carrouselContainer.appendChild(prevButton);
 
-    // Vérifier si le genre est défini (différent de null) avant d'ajouter la classe de genre
     if (genre !== null) {
-        document.querySelector(`.categorie.${genre}`).appendChild(carrouselContainer);
+        document.querySelector(`.${CLASS_CATEGORIE}.${genre}`).appendChild(carrouselContainer);
     } else {
-        // Si le genre est null, ajouter le carrouselContainer à l'élément 'sectionBestMovies'
-        const sectionBestMovies = document.querySelector('.categorie');
+        const sectionBestMovies = document.querySelector(`.${CLASS_CATEGORIE}`);
         sectionBestMovies.appendChild(carrouselContainer);
     }
 
-    // Initialiser le carrousel avec Swiper
     new Swiper(carrouselContainer, {
         slidesPerView: 4,
         spaceBetween: 10,
@@ -168,7 +145,7 @@ function carrousel(movies, genre) {
         },
     });
 
-    const buttonsSelector = genre !== null ? `.categorie.${genre} .btn` : '.btn';
+    const buttonsSelector = genre !== null ? `.${CLASS_CATEGORIE}.${genre} .${CLASS_BTN}` : `.${CLASS_BTN}`;
     const buttons = document.querySelectorAll(buttonsSelector);
 
     buttons.forEach(button => {
@@ -176,38 +153,28 @@ function carrousel(movies, genre) {
     });
 }
 
-
 async function main() {
     try {
-        // const mainMovies = get_main_movie();
-        const bestMovies = await movies_by_category("");
-        console.log(bestMovies[0])
-        console.log("cccccc")
-        const topMovie = bestMovies[0]
+        const bestMovies = await movies_by_category("", LIMIT_BEST_MOVIES);
+
+        const topMovie = bestMovies[0];
         main_movie(topMovie);
 
-        const otherBestMovies = bestMovies.slice(1, 8)
-        const sectionBestMovies = document.createElement('section');
-        sectionBestMovies.classList.add('categorie');
-        const h1BestMovies = document.createElement('h1');
-        h1BestMovies.textContent = "Films les mieux notes";
+        const otherBestMovies = bestMovies.slice(1, 8);
+        const sectionBestMovies = createSection(CLASS_CATEGORIE);
+        const h1BestMovies = createHeading("Films les mieux notés");
         sectionBestMovies.appendChild(h1BestMovies);
         document.querySelector('main').appendChild(sectionBestMovies);
-        carrousel(otherBestMovies, null);
-        // console.log(genre);
-
-
+        createCarrousel(otherBestMovies, null);
 
         const genres = ["Adventure", "Drama", "Fantasy"];
         for (const genre of genres) {
-            const movies = await movies_by_category(genre);
-            const section = document.createElement('section');
-            section.classList.add('categorie', genre);
-            const h1 = document.createElement('h1');
-            h1.textContent = genre;
+            const movies = await movies_by_category(genre, LIMIT_MOVIES_ByCATEGORY);
+            const section = createSection(CLASS_CATEGORIE, genre);
+            const h1 = createHeading(genre);
             section.appendChild(h1);
             document.querySelector('main').appendChild(section);
-            carrousel(movies, genre);
+            createCarrousel(movies, genre);
             console.log(genre);
         }
     } catch (error) {
