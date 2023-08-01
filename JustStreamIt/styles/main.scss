@@ -1,24 +1,22 @@
+// Variables
+$primary-color: #000;
+$secondary-color: #fff;
+$btn-background-color: #000;
+$btn-text-color: #fff;
+$btn-padding: 10px 20px;
+$btn-border-radius: 5em;
+$btn-position-bottom: 10%;
+$btn-position-left: 5%;
+
+// Import des polices Google Fonts
 @import url('https://fonts.googleapis.com/css2?family=Manrope&family=Montserrat:wght@100&display=swap');
 
-
-// $btn-styles: {
-//     background-color: #000;
-//     border-radius: 5em;
-//     color: #fff;
-//     padding: 10px 20px;
-//     text-decoration: none;
-//     position: absolute;
-//     bottom: 10%;
-//     left: 5%;
-// };
-
-
-
+// Styles du header
 header {
     display: flex;
     align-items: center;
     padding: 20px;
-    background-color: #f2f2f2;
+    background-color: $secondary-color;
     justify-content: space-between;
     font-family: 'Manrope', sans-serif;
 
@@ -41,7 +39,7 @@ header {
 
                 a {
                     text-decoration: none;
-                    color: #000;
+                    color: $primary-color;
                     font-size: large;
                     padding: 5px 10px;
                 }
@@ -50,195 +48,161 @@ header {
     }
 }
 
+// Styles du main
 main {
+    h1 {
+        font-family: 'Manrope', sans-serif;
+    }
+
     section.best_movie {
         position: relative;
         display: flex;
         flex-direction: row;
+        background: linear-gradient(to left, grey, lighten(grey, 70%));
+        /* Ajouter le dégradé */
+
         background-color: gray;
         justify-content: space-around;
         align-items: center;
-        /* Aligner les éléments enfants à gauche */
-
-        h1 {
-            font-family: 'Manrope', sans-serif;
-        }
-
-
-        /* Le bouton est géré plus bas, à transformer en variable */
-        // .btn {
-        //     background-color: #000;
-        //     border-radius: 5em;
-        //     color: #fff;
-        //     padding: 10px 20px;
-        //     text-decoration: none;
-            // position: absolute;
-            // bottom: 10%;
-            // left: 5%;
-        // }
 
         h2 {
-            color: yellow;
+            font-size: 2.5rem;
+            color: $primary-color;
+            margin-left: 30px;
         }
 
-        img {
-            display: block;
-            width: 100%;
-            object-fit: cover;
-            float: right;
-            margin-bottom: 20px;
-        }
-
-    }
-
-    section.best_rating_movies,
-    section.categorie1,
-    section.categorie2,
-    section.categorie3,
-    section.categorie {
-        h2 {
-            font-family: 'Montserrat', sans-serif;
-            display: flex;
-        }
-
-        .arrow-right {
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 10px solid #000;
-        }
-
-        .arrow-left {
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-right: 10px solid #000;
-        }
-
-        .photos_mosaique {
-            background-color: yellow;
-            display: grid;
-            grid-template-columns: 25% 25% 25% 25%;
-            gap: 10px;
-            justify-content: space-between;
+        .movie-image {
+            position: relative;
+            width: 70%;
 
             img {
-                width: 200px;
-                height: auto;
-                margin: 10px;
+                display: block;
+                width: 100%;
+                object-fit: cover;
+                margin-bottom: 20px;
+            }
+
+            .btn {
+                background-color: $btn-background-color;
+                border-radius: $btn-border-radius;
+                color: $btn-text-color;
+                padding: $btn-padding;
+                text-decoration: none;
+                position: absolute;
+                bottom: $btn-position-bottom;
+                left: $btn-position-left;
+                cursor: pointer;
             }
         }
     }
 }
 
-
-html,
 body {
     position: relative;
     height: 100%;
-}
-
-body {
-    background: #eee;
+    background-color: #eee;
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 14px;
-    color: #000;
-    margin: 0;
+    color: $primary-color;
+    // margin-left: 100;
     padding: 0;
 }
 
+// Styles pour le carrousel
+section.categorie {
+    margin-top: 30px;
 
-/* Carrousel */
-.swiper {
-    width: 100%;
-    height: 100%;
-
-    /* Styles pour les slides */
-    .swiper-slide {
-        text-align: center;
-        font-size: 18px;
-        background: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    h1 {
+        color: $primary-color;
+        border-top: 2px solid $primary-color;
+        padding-top: 10px;
+        margin-bottom: 20px;
     }
 
-    /* Styles pour les boutons de navigation */
-    &-button-next,
-    &-button-prev {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 30px;
-        height: 30px;
-        background-color: #000;
-        color: #fff;
-        border: none;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        z-index: 1;
+    .swiper-container {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        /* Ajout de la règle pour masquer le débordement */
+        height: 500px;
 
-        &::before {
-            content: '';
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-top: 2px solid #fff;
-            border-right: 2px solid #fff;
-            transform: rotate(45deg);
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            img {
+                display: block;
+                width: 100%;
+                object-fit: cover;
+                max-height: 300px;
+                border-radius: 10px;
+            }
+
+            .btn {
+                background-color: $btn-background-color;
+                color: $btn-text-color;
+                border-radius: $btn-border-radius;
+                padding: $btn-padding;
+                text-decoration: none;
+                margin-top: 20px;
+                cursor: pointer;
+            }
         }
 
-        &-prev {
-            left: 10px;
-        }
+        .swiper-button-next,
+        .swiper-button-prev {
+            width: 30px;
+            height: 30px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1;
 
-        &-next {
-            right: 10px;
-        }
-    }
+            &::before {
+                content: '';
+                display: inline-block;
+                width: 10px;
+                height: 10px;
+                border-top: 2px solid #fff;
+                border-right: 2px solid #fff;
+                transform: rotate(45deg);
+            }
 
-    /* Styles pour les boutons "More details" dans les slides */
-    .btn {
-        background-color: #000;
-        border-radius: 5em;
-        color: #fff;
-        padding: 10px 20px;
-        text-decoration: none;
-        position: absolute;
-        bottom: 10%;
-        left: 5%;
-        cursor: pointer;
+            &.swiper-button-prev {
+                left: 10px;
+            }
+
+            &.swiper-button-next {
+                right: 10px;
+            }
+        }
     }
 }
 
-
-
+// Styles pour le bouton en dehors du carrousel
 .btn {
-    background-color: #000;
-    border-radius: 5em;
-    color: #fff;
-    padding: 10px 20px;
+    background-color: $btn-background-color;
+    border-radius: $btn-border-radius;
+    color: $btn-text-color;
+    padding: $btn-padding;
     text-decoration: none;
     position: absolute;
-    bottom: 10%;
-    left: 5%;
+    bottom: $btn-position-bottom;
+    left: $btn-position-left;
     cursor: pointer;
 }
 
-
-/* PopUp */
+// Styles pour le popup
 .popup {
     position: fixed;
     top: 50%;
@@ -246,15 +210,11 @@ body {
     transform: translate(-50%, -50%);
     width: 80%;
     max-width: 600px;
-    background-color: #fff;
+    background-color: $secondary-color;
     border: 1px solid #ccc;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     padding: 20px;
     z-index: 9999;
-}
-
-#popup-content {
-    font-family: Arial, sans-serif;
 
     img {
         display: block;
@@ -263,19 +223,18 @@ body {
         float: right;
         margin-bottom: 20px;
     }
-
 }
 
 #close-popup-button {
-    background-color: #000;
-    color: #fff;
-    padding: 10px 20px;
+    background-color: $primary-color;
+    color: $secondary-color;
+    padding: $btn-padding;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
-}
 
-#close-popup-button:hover {
-    background-color: #222;
+    &:hover {
+        background-color: #222;
+    }
 }
