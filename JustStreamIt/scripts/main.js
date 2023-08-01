@@ -99,12 +99,7 @@ function createHeading(textContent) {
 
 
 
-
 function createCarrousel(movies, genre) {
-    const section = createSection(CLASS_CATEGORIE, genre);
-    const h1 = createHeading(genre);
-    section.appendChild(h1);
-
     const swiperWrapper = document.createElement('div');
     swiperWrapper.classList.add('swiper-wrapper');
 
@@ -112,8 +107,8 @@ function createCarrousel(movies, genre) {
         const movieCard = document.createElement('div');
         movieCard.classList.add('swiper-slide');
         movieCard.innerHTML = `
-            <h2>${movie.title}</h2>
-            <div class="movie-image">
+          <h2>${movie.title}</h2>
+          <div class="movie-image">
                 <img src="${movie.image_url}" alt="${movie.title}" />
                 <button class="${CLASS_BTN}" data-movie-id="${movie.id}">More details</button>
             </div>`;
@@ -126,14 +121,20 @@ function createCarrousel(movies, genre) {
 
     const nextButton = document.createElement('div');
     nextButton.classList.add('swiper-button-next');
+    nextButton.classList.add(`swiper-button-${genre}`); // Ajout de la classe spécifique au genre
     const prevButton = document.createElement('div');
     prevButton.classList.add('swiper-button-prev');
+    prevButton.classList.add(`swiper-button-${genre}`); // Ajout de la classe spécifique au genre
 
     carrouselContainer.appendChild(nextButton);
     carrouselContainer.appendChild(prevButton);
 
-    section.appendChild(carrouselContainer);
-    document.querySelector('main').appendChild(section);
+    if (genre !== null) {
+        document.querySelector(`.${CLASS_CATEGORIE}.${genre}`).appendChild(carrouselContainer);
+    } else {
+        const sectionBestMovies = document.querySelector(`.${CLASS_CATEGORIE}`);
+        sectionBestMovies.appendChild(carrouselContainer);
+    }
 
     new Swiper(carrouselContainer, {
         slidesPerView: 4,
@@ -150,7 +151,7 @@ function createCarrousel(movies, genre) {
         },
     });
 
-    const buttonsSelector = `.${CLASS_CATEGORIE}.${genre} .${CLASS_BTN}`;
+    const buttonsSelector = genre !== null ? `.${CLASS_CATEGORIE}.${genre} .${CLASS_BTN}` : `.${CLASS_BTN}`;
     const buttons = document.querySelectorAll(buttonsSelector);
 
     buttons.forEach(button => {
@@ -162,16 +163,23 @@ function createCarrousel(movies, genre) {
 async function main() {
     try {
         const bestMovies = await movies_by_category("", LIMIT_BEST_MOVIES);
-
         const topMovie = bestMovies[0];
         main_movie(topMovie);
 
         const otherBestMovies = bestMovies.slice(1, 8);
+        const sectionBestMovies = createSection(CLASS_CATEGORIE);
+        const h1BestMovies = createHeading("Films les mieux notés");
+        sectionBestMovies.appendChild(h1BestMovies);
+        document.querySelector('main').appendChild(sectionBestMovies);
         createCarrousel(otherBestMovies, null);
 
         const genres = ["Adventure", "Drama", "Fantasy"];
         for (const genre of genres) {
             const movies = await movies_by_category(genre, LIMIT_MOVIES_ByCATEGORY);
+            const section = createSection(CLASS_CATEGORIE, genre);
+            const h1 = createHeading(genre);
+            section.appendChild(h1);
+            document.querySelector('main').appendChild(section);
             createCarrousel(movies, genre);
         }
     } catch (error) {

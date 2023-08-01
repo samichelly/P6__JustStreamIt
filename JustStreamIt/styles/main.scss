@@ -123,8 +123,9 @@ section.categorie {
         width: 100%;
         max-width: 100%;
         overflow: hidden;
-        /* Ajout de la règle pour masquer le débordement */
         height: 500px;
+        position: relative;
+        /* Ajout pour positionner les flèches correctement */
 
         .swiper-slide {
             text-align: center;
@@ -154,8 +155,12 @@ section.categorie {
             }
         }
 
+        /* Styles pour les flèches de navigation */
         .swiper-button-next,
         .swiper-button-prev {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
             width: 30px;
             height: 30px;
             background-color: #000;
@@ -167,74 +172,79 @@ section.categorie {
             align-items: center;
             cursor: pointer;
             z-index: 1;
+            font-size: 18px;
+            font-weight: bold;
+            opacity: 0.7;
 
-            &::before {
-                content: '';
-                display: inline-block;
-                width: 10px;
-                height: 10px;
-                border-top: 2px solid #fff;
-                border-right: 2px solid #fff;
-                transform: rotate(45deg);
-            }
 
-            &.swiper-button-prev {
+            .swiper-button-prev {
                 left: 10px;
             }
 
-            &.swiper-button-next {
+            .swiper-button-next {
                 right: 10px;
+            }
+
+            .swiper-button-next::before {
+                content: '\203A';
+                /* Code du chevron droit */
+            }
+
+            .swiper-button-prev::before {
+                content: '\2039';
+                /* Code du chevron gauche */
             }
         }
     }
 }
 
-// Styles pour le bouton en dehors du carrousel
-.btn {
-    background-color: $btn-background-color;
-    border-radius: $btn-border-radius;
-    color: $btn-text-color;
-    padding: $btn-padding;
-    text-decoration: none;
-    position: absolute;
-    bottom: $btn-position-bottom;
-    left: $btn-position-left;
-    cursor: pointer;
-}
 
-// Styles pour le popup
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    max-width: 600px;
-    background-color: $secondary-color;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    z-index: 9999;
-
-    img {
-        display: block;
-        width: 40%;
-        object-fit: cover;
-        float: right;
-        margin-bottom: 20px;
+    // Styles pour le bouton en dehors du carrousel
+    .btn {
+        background-color: $btn-background-color;
+        border-radius: $btn-border-radius;
+        color: $btn-text-color;
+        padding: $btn-padding;
+        text-decoration: none;
+        position: absolute;
+        bottom: $btn-position-bottom;
+        left: $btn-position-left;
+        cursor: pointer;
     }
-}
 
-#close-popup-button {
-    background-color: $primary-color;
-    color: $secondary-color;
-    padding: $btn-padding;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
+    // Styles pour le popup
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 600px;
+        background-color: $secondary-color;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        z-index: 9999;
 
-    &:hover {
-        background-color: #222;
+        img {
+            display: block;
+            width: 40%;
+            object-fit: cover;
+            float: right;
+            margin-bottom: 20px;
+        }
     }
-}
+
+    #close-popup-button {
+        background-color: $primary-color;
+        color: $secondary-color;
+        padding: $btn-padding;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+
+        &:hover {
+            background-color: #222;
+        }
+    }
