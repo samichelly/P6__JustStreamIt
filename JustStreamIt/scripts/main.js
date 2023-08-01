@@ -6,12 +6,15 @@ const CLASS_CATEGORIE = 'categorie';
 const CLASS_BTN = 'btn';
 
 function main_movie(best_Movie) {
-    document.getElementById('best_movie').innerHTML =
-        `<h2>${best_Movie.title} (${best_Movie.year})</h2>
-        <img src=  ${best_Movie.image_url}>`;
-    const bestButton = document.getElementById('btn_best_movie');
-    bestButton.addEventListener('click', () => showMoviePopup(best_Movie.id));
+    document.getElementById('best_movie_title').innerHTML =
+        `${best_Movie.title} (${best_Movie.year})`;
+    const bestButtonDetails = document.getElementById('btn_best_movie_details');
+    bestButtonDetails.addEventListener('click', () => showMoviePopup(best_Movie.id));
+
+    const bestMovieImage = document.getElementById('best_movie_image').querySelector('img');
+    bestMovieImage.src = best_Movie.image_url;
 }
+
 
 async function movies_by_category(genre, limit = LIMIT_MOVIES_ByCATEGORY) {
     const pagesToFetch = Math.ceil(limit / MOVIES_BY_API_PAGE);
@@ -107,7 +110,7 @@ function createCarrousel(movies, genre) {
         const movieCard = document.createElement('div');
         movieCard.classList.add('swiper-slide');
         movieCard.innerHTML = `
-          <h2>${movie.title}</h2>
+          <h3>${movie.title}</h3>
           <div class="movie-image">
                 <img src="${movie.image_url}" alt="${movie.title}" />
                 <button class="${CLASS_BTN}" data-movie-id="${movie.id}">More details</button>
@@ -139,7 +142,7 @@ function createCarrousel(movies, genre) {
     new Swiper(carrouselContainer, {
         slidesPerView: 4,
         spaceBetween: 10,
-        loop: true,
+        loop: false,
         navigation: {
             nextEl: nextButton,
             prevEl: prevButton,
