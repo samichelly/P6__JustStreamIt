@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope&family=Montserrat:wght@100&display=swap');
+
 $primary-color: #000;
 $secondary-color: #fff;
 $btn-background-color: #000;
@@ -6,8 +8,6 @@ $btn-padding: 10px 20px;
 $btn-border-radius: 5em;
 $btn-position-bottom: 10%;
 $btn-position-left: 5%;
-
-@import url('https://fonts.googleapis.com/css2?family=Manrope&family=Montserrat:wght@100&display=swap');
 
 // Styles du header
 header {
@@ -112,7 +112,6 @@ body {
     font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
     font-size: 14px;
     color: $primary-color;
-    // margin-left: 100;
     padding: 0;
 }
 
@@ -161,7 +160,7 @@ section.categorie {
                 border-radius: $btn-border-radius;
                 padding: $btn-padding;
                 text-decoration: none;
-                margin: 0px 140px; // 0px 30px;
+                margin: 0px 140px;
                 cursor: pointer;
             }
         }

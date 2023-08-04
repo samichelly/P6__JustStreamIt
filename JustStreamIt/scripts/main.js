@@ -167,8 +167,6 @@ function createCarrousel(movies, genre) {
 }
 
 
-
-
 async function main() {
     try {
         const bestMovies = await movies_by_category("", LIMIT_BEST_MOVIES);
