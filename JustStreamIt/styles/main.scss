@@ -133,7 +133,6 @@ section.categorie {
         overflow: hidden;
         height: 500px;
         position: relative;
-        /* Ajout pour positionner les flèches correctement */
 
 
         .swiper-slide {
@@ -147,7 +146,6 @@ section.categorie {
             flex: 0 0 calc(25% - 20px);
             border-radius: 10px;
             margin: 10px;
-            /* Espacement entre les vignettes */
 
             img {
                 display: block;
@@ -163,7 +161,7 @@ section.categorie {
                 border-radius: $btn-border-radius;
                 padding: $btn-padding;
                 text-decoration: none;
-                margin: 0px 100px; // 0px 30px;
+                margin: 0px 140px; // 0px 30px;
                 cursor: pointer;
             }
         }
@@ -200,12 +198,10 @@ section.categorie {
 
             .swiper-button-next::before {
                 content: '\203A';
-                /* Code du chevron droit */
             }
 
             .swiper-button-prev::before {
                 content: '\2039';
-                /* Code du chevron gauche */
             }
         }
     }

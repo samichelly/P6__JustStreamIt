@@ -85,9 +85,9 @@ function showMoviePopup(movieId) {
         });
 }
 
-function createSection(CLASS_CATEGORIE, genre) {
+function createSection(class_category_css, genre) {
     const section = document.createElement('section');
-    section.classList.add(CLASS_CATEGORIE);
+    section.classList.add(class_category_css);
     if (genre) {
         section.classList.add(genre);
     }
@@ -137,8 +137,7 @@ function createCarrousel(movies, genre) {
     carrouselContainer.appendChild(nextButton);
     carrouselContainer.appendChild(prevButton);
 
-    // Utilisez les sélecteurs CSS corrects pour cibler la bonne classe
-    if (genre && genre !== "") {
+    if (genre !== "") {
         document.querySelector(`.${CLASS_CATEGORIE}.${genre}`).appendChild(carrouselContainer);
     } else {
         document.querySelector(`.${CLASS_CATEGORIE}`).appendChild(carrouselContainer);
@@ -159,7 +158,7 @@ function createCarrousel(movies, genre) {
         },
     });
 
-    const buttonsSelector = genre && genre !== "" ? `.${CLASS_CATEGORIE}.${genre} .${CLASS_BTN}` : `.${CLASS_BTN}`;
+    const buttonsSelector = genre !== "" ? `.${CLASS_CATEGORIE}.${genre} .${CLASS_BTN}` : `.${CLASS_BTN}`;
     const buttons = document.querySelectorAll(buttonsSelector);
 
     buttons.forEach(button => {
