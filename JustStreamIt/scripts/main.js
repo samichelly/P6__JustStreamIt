@@ -85,21 +85,21 @@ function showMoviePopup(movieId) {
         });
 }
 
-function createSection(className, genre = null) {
+function createSection(CLASS_CATEGORIE, genre) {
     const section = document.createElement('section');
-    section.classList.add(className);
+    section.classList.add(CLASS_CATEGORIE);
     if (genre) {
         section.classList.add(genre);
     }
     return section;
 }
 
+
 function createHeading(textContent) {
     const h1 = document.createElement('h1');
     h1.textContent = textContent;
     return h1;
 }
-
 
 
 function createCarrousel(movies, genre) {
@@ -110,8 +110,8 @@ function createCarrousel(movies, genre) {
         const movieCard = document.createElement('div');
         movieCard.classList.add('swiper-slide');
         movieCard.innerHTML = `
-          <h3>${movie.title}</h3>
-          <div class="movie-image">
+            <h3>${movie.title}</h3>
+            <div class="movie-image">
                 <img src="${movie.image_url}" alt="${movie.title}" />
                 <button class="${CLASS_BTN}" data-movie-id="${movie.id}">More details</button>
             </div>`;
@@ -120,23 +120,28 @@ function createCarrousel(movies, genre) {
 
     const carrouselContainer = document.createElement('div');
     carrouselContainer.classList.add('swiper-container');
+
+    if (genre && genre !== "") {
+        carrouselContainer.classList.add(genre);
+    }
+
     carrouselContainer.appendChild(swiperWrapper);
 
     const nextButton = document.createElement('div');
     nextButton.classList.add('swiper-button-next');
-    nextButton.classList.add(`swiper-button-${genre}`); // Ajout de la classe spécifique au genre
+    nextButton.classList.add(`swiper-button-${genre}`);
     const prevButton = document.createElement('div');
     prevButton.classList.add('swiper-button-prev');
-    prevButton.classList.add(`swiper-button-${genre}`); // Ajout de la classe spécifique au genre
+    prevButton.classList.add(`swiper-button-${genre}`);
 
     carrouselContainer.appendChild(nextButton);
     carrouselContainer.appendChild(prevButton);
 
-    if (genre !== null) {
+    // Utilisez les sélecteurs CSS corrects pour cibler la bonne classe
+    if (genre && genre !== "") {
         document.querySelector(`.${CLASS_CATEGORIE}.${genre}`).appendChild(carrouselContainer);
     } else {
-        const sectionBestMovies = document.querySelector(`.${CLASS_CATEGORIE}`);
-        sectionBestMovies.appendChild(carrouselContainer);
+        document.querySelector(`.${CLASS_CATEGORIE}`).appendChild(carrouselContainer);
     }
 
     new Swiper(carrouselContainer, {
@@ -154,7 +159,7 @@ function createCarrousel(movies, genre) {
         },
     });
 
-    const buttonsSelector = genre !== null ? `.${CLASS_CATEGORIE}.${genre} .${CLASS_BTN}` : `.${CLASS_BTN}`;
+    const buttonsSelector = genre && genre !== "" ? `.${CLASS_CATEGORIE}.${genre} .${CLASS_BTN}` : `.${CLASS_BTN}`;
     const buttons = document.querySelectorAll(buttonsSelector);
 
     buttons.forEach(button => {
@@ -163,24 +168,25 @@ function createCarrousel(movies, genre) {
 }
 
 
+
+
 async function main() {
     try {
         const bestMovies = await movies_by_category("", LIMIT_BEST_MOVIES);
         const topMovie = bestMovies[0];
         main_movie(topMovie);
 
-        const otherBestMovies = bestMovies.slice(1, 8);
-        const sectionBestMovies = createSection(CLASS_CATEGORIE);
-        const h1BestMovies = createHeading("Films les mieux notés");
-        sectionBestMovies.appendChild(h1BestMovies);
-        document.querySelector('main').appendChild(sectionBestMovies);
-        createCarrousel(otherBestMovies, null);
-
-        const genres = ["Adventure", "Drama", "Fantasy"];
+        const genres = ["", "Biography", "Drama", "History"];
         for (const genre of genres) {
-            const movies = await movies_by_category(genre, LIMIT_MOVIES_ByCATEGORY);
+            let movies;
+            if (genre === "") {
+                movies = bestMovies.slice(1, 8);
+            } else {
+                movies = await movies_by_category(genre, LIMIT_MOVIES_ByCATEGORY);
+            }
+
             const section = createSection(CLASS_CATEGORIE, genre);
-            const h1 = createHeading(genre);
+            const h1 = createHeading(genre === "" ? "Films les mieux notés" : genre);
             section.appendChild(h1);
             document.querySelector('main').appendChild(section);
             createCarrousel(movies, genre);
